@@ -1,0 +1,12 @@
+{
+  "name": "deploy-mern-app-1",
+  "version": "1.0.0",
+  "description": "MERN app deployment",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && npm install && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
