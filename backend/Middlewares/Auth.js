@@ -1,19 +1,26 @@
-
+// Middleware: Verify JWT token from Authorization header and attach user to request
 const jwt = require('jsonwebtoken');
+
 const ensureAuthenticated = (req, res, next) => {
-    const auth = req.headers['authorization'];
-    if (!auth) {
-        return res.status(403)
-            .json({ message: 'Unauthorized, JWT token is require' });
+    const authToken = req.headers['authorization'];
+    
+    // Check if token is present
+    if (!authToken) {
+        return res.status(403).json({ 
+            message: 'Unauthorized: JWT token is required' 
+        });
     }
+    
     try {
-        const decoded = jwt.verify(auth, process.env.JWT_SECRET);
-        req.user = decoded;
+        // Verify token signature and expiration
+        const decodedUser = jwt.verify(authToken, process.env.JWT_SECRET);
+        req.user = decodedUser;
         next();
     } catch (err) {
-        return res.status(403)
-            .json({ message: 'Unauthorized, JWT token wrong or expired' });
+        return res.status(403).json({ 
+            message: 'Unauthorized: JWT token is invalid or expired' 
+        });
     }
-}
+};
 
 module.exports = ensureAuthenticated;
