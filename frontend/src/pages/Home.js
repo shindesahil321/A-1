@@ -22,14 +22,14 @@ function Home() {
 
     const fetchProducts = async () => {
         try {
-            const url = "http://localhost:8080/products";
+            const apiBase = process.env.REACT_APP_API_BASE || '';
+            const url = `${apiBase}/products`;
             const response = await fetch(url, {
                 headers: {
                     'Authorization': localStorage.getItem('token')
                 }
             });
             const result = await response.json();
-            console.log(result);
             if (response.ok) {
                 setProducts(result);
             } else {
