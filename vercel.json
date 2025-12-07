@@ -5,6 +5,17 @@
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "build" }
+    },
+    {
+      "src": "backend/index.js",
+      "use": "@vercel/node"
     }
+  ],
+  "routes": [
+    // Route API calls to the backend serverless function
+    { "src": "/auth/(.*)", "dest": "/backend/index.js" },
+    { "src": "/products/(.*)", "dest": "/backend/index.js" },
+    // Serve frontend build for all other routes
+    { "src": "/(.*)", "dest": "/frontend/build/$1" }
   ]
 }

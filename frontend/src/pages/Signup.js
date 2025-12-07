@@ -27,7 +27,9 @@ function Signup() {
             return handleError('name, email and password are required')
         }
         try {
-            const url = `http://localhost:8080/auth/signup`;
+            // Use REACT_APP_API_BASE when provided (production), otherwise fallback to relative path for local dev + proxy
+            const apiBase = process.env.REACT_APP_API_BASE || '';
+            const url = `${apiBase}/auth/signup`;
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
