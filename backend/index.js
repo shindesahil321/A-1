@@ -19,6 +19,13 @@ app.use(cors());
 app.use('/auth', AuthRouter);
 app.use('/products', ProductRouter);
 
+// Global error handler to catch unexpected errors and log them
+app.use((err, req, res, next) => {
+    console.error('Unhandled error:', err && err.stack ? err.stack : err);
+    const message = process.env.NODE_ENV === 'development' ? (err.message || 'Internal server error') : 'Internal server error';
+    res.status(500).json({ message, success: false });
+});
+
 // Serve static files from the React app build directory when present
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
@@ -33,6 +40,14 @@ if (require.main === module) {
         console.log(`Server is running on ${PORT}`)
     });
 }
+
+// Log unhandled promise rejections and uncaught exceptions
+process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled Rejection at:', reason);
+});
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err && err.stack ? err.stack : err);
+});
 
 // Export the app for serverless platforms (Vercel) or testing
 module.exports = app;

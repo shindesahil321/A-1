@@ -20,11 +20,9 @@ const signup = async (req, res) => {
                 success: true
             })
     } catch (err) {
-        res.status(500)
-            .json({
-                message: "Internal server errror",
-                success: false
-            })
+        console.error('Signup error:', err && err.stack ? err.stack : err);
+        const message = process.env.NODE_ENV === 'development' ? (err.message || 'Internal server error') : 'Internal server error';
+        res.status(500).json({ message, success: false });
     }
 }
 
@@ -58,11 +56,9 @@ const login = async (req, res) => {
                 name: user.name
             })
     } catch (err) {
-        res.status(500)
-            .json({
-                message: "Internal server errror",
-                success: false
-            })
+            console.error('Login error:', err && err.stack ? err.stack : err);
+            const message = process.env.NODE_ENV === 'development' ? (err.message || 'Internal server error') : 'Internal server error';
+            res.status(500).json({ message, success: false });
     }
 }
 
